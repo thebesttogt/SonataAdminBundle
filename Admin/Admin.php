@@ -568,8 +568,23 @@ abstract class Admin implements AdminInterface, DomainObjectInterface
      */
     public function getExportFields()
     {
-        return $this->getModelManager()->getExportFields($this->getClass());
+      $ret = array();
+      $list = $this->getList();
+
+     $names = array();
+
+      $excluded_columns = array("batch","_action");
+
+     foreach($list->getElements() as $k=>$v){
+
+        if(!in_array($k,$excluded_columns)){
+            $ret[] = $k;
+            $names[] = $this->trans(/** @Ignore */ $v->getOption('label'));
+        }
     }
+
+    return array($ret,$names);
+}
 
     /**
      * {@inheritdoc}
